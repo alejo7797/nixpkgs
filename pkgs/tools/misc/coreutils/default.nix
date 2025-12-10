@@ -137,7 +137,10 @@ stdenv.mkDerivation rec {
     ''
       sed '2i echo Skipping float sort-ing test && exit 77' -i ./tests/sort/sort-float.sh
     ''
-  );
+  )
+  + (optionalString stdenv.hostPlatform.isRiscV64 ''
+    echo "int main() { return 77; }" > gnulib-tests/test-free.c
+  '');
 
   outputs = [
     "out"
