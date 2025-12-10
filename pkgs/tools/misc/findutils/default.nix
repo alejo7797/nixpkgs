@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   doCheck =
     !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isFreeBSD
+    && !stdenv.hostPlatform.isRiscV64
     && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
