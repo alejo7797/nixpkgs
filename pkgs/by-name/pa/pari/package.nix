@@ -8,6 +8,7 @@
   perl,
   readline,
   texliveBasic,
+  withStatic ? false,
   withThread ? true,
 }:
 
@@ -49,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [ "all" ];
+
+  installTargets = [
+    "install"
+  ]
+  ++ lib.optionals withStatic [
+    "install-lib-sta"
+  ];
 
   meta = {
     homepage = "http://pari.math.u-bordeaux.fr";
