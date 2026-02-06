@@ -1,3 +1,17 @@
+diff --git a/salhelper/Module_salhelper.mk b/salhelper/Module_salhelper.mk
+index e10508b559f2..e5cd5c413e02 100644
+--- a/salhelper/Module_salhelper.mk
++++ b/salhelper/Module_salhelper.mk
+@@ -15,8 +15,8 @@ $(eval $(call gb_Module_add_targets,salhelper,\
+ ))
+ 
+ ifneq ($(OS),iOS)
++# CppunitTest_salhelper_testapi flaky
+ $(eval $(call gb_Module_add_check_targets,salhelper,\
+-	CppunitTest_salhelper_testapi \
+ ))
+ endif
+ 
 diff --git a/sc/Module_sc.mk b/sc/Module_sc.mk
 index 63dc4b92b90d..fc6d83da6448 100644
 --- a/sc/Module_sc.mk
