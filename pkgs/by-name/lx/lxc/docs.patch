@@ -1,0 +1,13 @@
+diff --git a/doc/meson.build b/doc/meson.build
+index 79d52fecc..3b56cf3ad 100644
+--- a/doc/meson.build
++++ b/doc/meson.build
+@@ -12,7 +12,7 @@ if want_mans
+         ['lxc-usernsexec', '1'],
+     ]
+
+-    if want_tools
++    if want_tools or want_tools_multicall
+         PAGES += [
+             ['lxc-attach', '1'],
+             ['lxc-autostart', '1'],

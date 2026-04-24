@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # FIXME: Install all tool man pages.
+    ./docs.patch
+
     # Fix hardcoded path of lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
