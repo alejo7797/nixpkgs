@@ -51,9 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # fix docbook2man version detection
-    ./docbook-hack.patch
-
     # Fix hardcoded path of lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
