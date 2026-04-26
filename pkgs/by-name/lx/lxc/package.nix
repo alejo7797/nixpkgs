@@ -76,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./user-nic.diff
   ];
 
+  postPatch = ''
+    substituteInPlace templates/lxc-{download,local,oci}.in config/templates/{common,userns}.conf.in \
+      --subst-var-by LXCTEMPLATECONFIG "/run/current-system/sw/share/lxc/config"
+
+    substituteInPlace src/lxc/lxccontainer.c \
+      --replace-fail LXCTEMPLATECONFIG "\"/run/current-system/sw/share/lxc/config\""
+  '';
+
   mesonFlags = [
     (mesonOption "distrosysconfdir" "${placeholder "out"}/etc/lxc")
     (mesonOption "systemd-unitdir" "${placeholder "out"}/lib/systemd/system")
@@ -91,14 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace $out/etc/lxc/lxc --replace-fail "$out/etc/lxc" "/etc/lxc"
     substituteInPlace $out/libexec/lxc/lxc-net --replace-fail "$out/etc/lxc" "/etc/lxc"
-
-    substituteInPlace $out/share/lxc/templates/lxc-download --replace-fail "$out/share" "/run/current-system/sw/share"
-    substituteInPlace $out/share/lxc/templates/lxc-local --replace-fail "$out/share" "/run/current-system/sw/share"
-    substituteInPlace $out/share/lxc/templates/lxc-oci --replace-fail "$out/share" "/run/current-system/sw/share"
-
-    substituteInPlace $out/share/lxc/config/common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
-    substituteInPlace $out/share/lxc/config/userns.conf --replace-fail "$out/share" "/run/current-system/sw/share"
-    substituteInPlace $out/share/lxc/config/oci.common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
   '';
 
   passthru = {
