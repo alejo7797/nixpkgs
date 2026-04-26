@@ -928,7 +928,7 @@ in
   lorri = handleTest ./lorri/default.nix { };
   luks = runTest ./luks.nix;
   lvm2 = handleTest ./lvm2 { };
-  lxc = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./lxc;
+  lxc = import ./lxc { inherit pkgs runTestOn; };
   lxd-image-server = runTest ./lxd-image-server.nix;
   lxqt = runTest ./lxqt.nix;
   ly = runTest ./ly.nix;
