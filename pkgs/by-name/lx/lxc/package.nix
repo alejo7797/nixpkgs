@@ -71,6 +71,12 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: Install all tool man pages.
     ./docs.patch
 
+    # Don't try installing files to /etc
+    ./install-paths.patch
+
+    # Hack around /etc/sysconfig
+    ./sysconfdir-hack.patch
+
     # Fix hardcoded path to lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
@@ -82,24 +88,20 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/lxc/lxccontainer.c \
       --replace-fail LXCTEMPLATECONFIG "\"/run/current-system/sw/share/lxc/config\""
+
+    substituteInPlace config/apparmor/{,abstractions/,profiles/}meson.build config/etc/meson.build \
+      --subst-var out
   '';
 
   mesonFlags = [
-    (mesonOption "distrosysconfdir" "${placeholder "out"}/etc/lxc")
+    (mesonOption "sysconfdir" "/etc")
     (mesonOption "systemd-unitdir" "${placeholder "out"}/lib/systemd/system")
-    (mesonOption "usernet-config-path" "/etc/lxc/lxc-usernet")
     (mesonBool "install-state-dirs" false)
     (mesonBool "pam-cgroup" true)
     (mesonBool "specfile" false)
     (mesonBool "tools" false)
     (mesonBool "tools-multicall" true)
   ];
-
-  # /run/current-system/sw/share
-  postInstall = ''
-    substituteInPlace $out/etc/lxc/lxc --replace-fail "$out/etc/lxc" "/etc/lxc"
-    substituteInPlace $out/libexec/lxc/lxc-net --replace-fail "$out/etc/lxc" "/etc/lxc"
-  '';
 
   passthru = {
     tests = {

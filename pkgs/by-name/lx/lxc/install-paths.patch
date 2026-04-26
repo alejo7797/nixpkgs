@@ -1,0 +1,104 @@
+diff --git a/config/apparmor/abstractions/meson.build b/config/apparmor/abstractions/meson.build
+index 8424c38b0..e618514d9 100644
+--- a/config/apparmor/abstractions/meson.build
++++ b/config/apparmor/abstractions/meson.build
+@@ -7,12 +7,12 @@ if libapparmor.found()
+         input: ['container-base.in', '../container-rules'],
+         output: 'container-base',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d', 'abstractions', 'lxc'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d', 'abstractions', 'lxc'))
+ 
+     configure_file(
+         configuration: conf,
+         input: 'start-container.in',
+         output: 'start-container',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d', 'abstractions', 'lxc'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d', 'abstractions', 'lxc'))
+ endif
+diff --git a/config/apparmor/meson.build b/config/apparmor/meson.build
+index 1f0d8c4f1..c453942f3 100644
+--- a/config/apparmor/meson.build
++++ b/config/apparmor/meson.build
+@@ -6,19 +6,19 @@ if libapparmor.found()
+         input: 'lxc-containers',
+         output: 'lxc-containers',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d'))
+ 
+     configure_file(
+         configuration: dummy_config_data,
+         input: 'usr.bin.lxc-start',
+         output: 'usr.bin.lxc-start',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d'))
+ 
+     configure_file(
+         configuration: dummy_config_data,
+         input: 'usr.bin.lxc-copy',
+         output: 'usr.bin.lxc-copy',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d'))
+ endif
+diff --git a/config/apparmor/profiles/meson.build b/config/apparmor/profiles/meson.build
+index 1cefb0692..7bfd3ceb2 100644
+--- a/config/apparmor/profiles/meson.build
++++ b/config/apparmor/profiles/meson.build
+@@ -6,26 +6,26 @@ if libapparmor.found()
+         input: 'lxc-default',
+         output: 'lxc-default',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d', 'lxc'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d', 'lxc'))
+ 
+     configure_file(
+         configuration: dummy_config_data,
+         input: 'lxc-default-cgns',
+         output: 'lxc-default-cgns',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d', 'lxc'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d', 'lxc'))
+ 
+     configure_file(
+         configuration: dummy_config_data,
+         input: 'lxc-default-with-mounting',
+         output: 'lxc-default-with-mounting',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d', 'lxc'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d', 'lxc'))
+ 
+     configure_file(
+         configuration: dummy_config_data,
+         input: 'lxc-default-with-nesting',
+         output: 'lxc-default-with-nesting',
+         install: true,
+-        install_dir: join_paths(sysconfdir, 'apparmor.d', 'lxc'))
++        install_dir: join_paths('@out@', 'etc', 'apparmor.d', 'lxc'))
+ endif
+diff --git a/config/etc/meson.build b/config/etc/meson.build
+index 28b4ebe0e..4c7374bad 100644
+--- a/config/etc/meson.build
++++ b/config/etc/meson.build
+@@ -5,4 +5,4 @@ lxc_system_config = configure_file(
+     input: 'default.conf.lxcbr',
+     output: 'default.conf',
+     install: true,
+-    install_dir: lxcconfdir)
++    install_dir: join_paths('@out@', 'etc', 'lxc'))
+diff --git a/meson.build b/meson.build
+index 63a36d1ed..d6ab47c06 100644
+--- a/meson.build
++++ b/meson.build
+@@ -164,8 +164,6 @@ if want_install_init or want_spec
+     elif fs.is_dir('/etc/default')
+         distrosysconfdir = join_paths(sysconfdir, 'default')
+         conf.set('LXC_DISTRO_SYSCONF', distrosysconfdir)
+-    else
+-        error('"distrosysconfdir" is not set')
+     endif
+ endif
+ 

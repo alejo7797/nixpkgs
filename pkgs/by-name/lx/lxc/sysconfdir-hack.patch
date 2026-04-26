@@ -1,0 +1,25 @@
+diff --git a/config/init/common/lxc-containers.in b/config/init/common/lxc-containers.in
+index 45a518267..0bd23abe9 100755
+--- a/config/init/common/lxc-containers.in
++++ b/config/init/common/lxc-containers.in
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+ 
+ sysconfdir="@SYSCONFDIR@"
+-distrosysconfdir="@LXC_DISTRO_SYSCONF@"
++distrosysconfdir="${NIXOS_LXC_SYSCONF:-}"
+ bindir="@BINDIR@"
+ localstatedir="@LOCALSTATEDIR@"
+ 
+diff --git a/config/init/common/lxc-net.in b/config/init/common/lxc-net.in
+index 45f1dd1b6..03bdacec4 100755
+--- a/config/init/common/lxc-net.in
++++ b/config/init/common/lxc-net.in
+@@ -1,6 +1,6 @@
+ #!/bin/sh -
+ 
+-distrosysconfdir="@LXC_DISTRO_SYSCONF@"
++distrosysconfdir="${NIXOS_LXC_SYSCONF:-}"
+ varrun="@RUNTIME_PATH@/lxc"
+ varlib="@LOCALSTATEDIR@/lib"
+ 
