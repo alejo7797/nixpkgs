@@ -10,6 +10,7 @@
   libcap,
   libseccomp,
   libselinux,
+  linux-pam,
   meson,
   ninja,
   nixosTests,
@@ -20,9 +21,23 @@
   nix-update-script,
 }:
 
+let
+  inherit (lib.strings)
+    mesonBool
+    mesonOption
+    ;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
   version = "7.0.0";
+
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "lxc";
@@ -30,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-eB68l7SmVxJViGmVlVtEXVD+cRtr4WqOrA8b9ImQ89g=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     docbook2x
@@ -39,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    # some hooks use compgen
-    bashInteractive
+    bashInteractive # some hooks use compgen
     dbus
     libapparmor
     libcap
     libseccomp
     libselinux
+    linux-pam
     openssl
     systemd
   ];
@@ -54,20 +71,20 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: Install all tool man pages.
     ./docs.patch
 
-    # Fix hardcoded path of lxc-user-nic
+    # Fix hardcoded path to lxc-user-nic
     # This is needed to use unprivileged containers
     ./user-nic.diff
   ];
 
   mesonFlags = [
-    "-Dinstall-init-files=true"
-    "-Dinstall-state-dirs=false"
-    "-Dspecfile=false"
-    "-Dtools-multicall=true"
-    "-Dtools=false"
-    "-Dusernet-config-path=/etc/lxc/lxc-usernet"
-    "-Ddistrosysconfdir=${placeholder "out"}/etc/lxc"
-    "-Dsystemd-unitdir=${placeholder "out"}/lib/systemd/system"
+    (mesonOption "distrosysconfdir" "${placeholder "out"}/etc/lxc")
+    (mesonOption "systemd-unitdir" "${placeholder "out"}/lib/systemd/system")
+    (mesonOption "usernet-config-path" "/etc/lxc/lxc-usernet")
+    (mesonBool "install-state-dirs" false)
+    (mesonBool "pam-cgroup" true)
+    (mesonBool "specfile" false)
+    (mesonBool "tools" false)
+    (mesonBool "tools-multicall" true)
   ];
 
   # /run/current-system/sw/share
@@ -83,10 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/share/lxc/config/userns.conf --replace-fail "$out/share" "/run/current-system/sw/share"
     substituteInPlace $out/share/lxc/config/oci.common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
   '';
-
-  enableParallelBuilding = true;
-
-  doCheck = true;
 
   passthru = {
     tests = {
