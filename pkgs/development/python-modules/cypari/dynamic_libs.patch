@@ -1,0 +1,23 @@
+diff --git a/setup.py b/setup.py
+index a41800e..6e836ce 100644
+--- a/setup.py
++++ b/setup.py
+@@ -258,8 +258,7 @@ class CyPariBuildExt(build_ext):
+             os.rename('gmp_src', os.path.join('build', 'gmp_src'))
+             building_sdist = True
+ 
+-        if (not os.path.exists(os.path.join('libcache', PARIDIR))
+-            or not os.path.exists(os.path.join('libcache', GMPDIR))):
++        if False:
+             if sys.platform == 'win32':
+                 # This is meant to work even in a Windows Command Prompt
+                 cmd = r'export PATH="%s" ; export MSYSTEM=UCRT64 ; bash build_pari.sh'%BASHPATH
+@@ -378,7 +377,7 @@ elif sys.platform == 'win32':
+ else:
+     compile_args = []
+ 
+-link_args += [pari_static_library, gmp_static_library]
++link_args += ["-lgmp", "-lpari"]
+ if sys.platform.startswith('linux'):
+     link_args += ['-Wl,-Bsymbolic-functions', '-Wl,-Bsymbolic']
+ 
