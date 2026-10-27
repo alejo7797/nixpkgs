@@ -125,6 +125,7 @@ let
         ++ lib.optional (
           targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano"
         ) "--with-newlib"
+        ++ lib.optional (targetPlatform.libc == "picolibc") "--with-picolibc"
         ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
