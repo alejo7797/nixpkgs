@@ -9,7 +9,7 @@
   which,
   gmp,
   cadical,
-  cadical' ? cadical.override { version = "2.1.3"; },
+  cadical' ? cadical.override { version = "3.0.1"; },
   leangz,
   makeWrapper,
   openssl,
@@ -26,7 +26,7 @@
 
   # Official releases go up to `stage2`.  It should typically be enough to build `stage1`, but
   # obscure issues can arise if the checked-in `stage0` is not up-to-date.
-  leanStage ? 2,
+  leanStage ? 1,
 }:
 
 assert lib.elem leanStage [
@@ -37,7 +37,7 @@ assert lib.elem leanStage [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.36.0";
+  version = "4.37.0-rc1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9SOI50OuqCknfsJGGpIyzaDRDGADqsJza+5iWbeFmzc=";
+    hash = "sha256-a3HWT7IjGm4xirGczEDHN5imII3nLBR4sBh6lVRZYds=";
   };
 
   patches = [
@@ -124,6 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix `System.Platform.target` not being set
     "-DLEAN_PLATFORM_TARGET=${stdenv.hostPlatform.config}"
+
+    # TODO: remove before marking the PR ready
+    "-DLEAN_SPECIAL_VERSION_DESC=rc1"
   ];
 
   preBuild = ''
@@ -157,11 +160,11 @@ stdenv.mkDerivation (finalAttrs: {
     "lint.py"
 
     # Fails without network access
-    "elab/async_dns.lean"
+    "async/elab/async_dns.lean"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails on Darwin
-    "elab/async_systems_info.lean"
+    "async/elab/async_systems_info.lean"
   ];
 
   __darwinAllowLocalNetworking = true;

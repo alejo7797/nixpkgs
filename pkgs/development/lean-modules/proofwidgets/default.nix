@@ -10,13 +10,13 @@
 buildLakePackage (finalAttrs: {
   pname = "lean4-proofwidgets";
   # nixpkgs-update: no auto update
-  version = "0.0.120-unstable-2026-11-16";
+  version = "0.0.121-unstable-2026-11-18";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "ProofWidgets4";
-    rev = "2f0f3520daeac2d9310ff25b7a877a0e5cdaa203";
-    hash = "sha256-+BPCDJTZwPz+8p6mKy0c+W2QUErgGQF2RmQxcimxFCs=";
+    rev = "197b8bdfd8bbfea6dff6ac04170a710b231c3aaa";
+    hash = "sha256-JEOWh7PsZfVP4aPEC2ReVYHOGR/Ov7wytSgvUQ5xPNg=";
   };
 
   leanPackageName = "proofwidgets";
