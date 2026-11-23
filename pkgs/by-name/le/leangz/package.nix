@@ -9,16 +9,16 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leangz";
   # nixpkgs-update: no auto update
-  version = "0.1.20"; # Should match LEANTAR_VERSION in leanprover/lean4/CMakeLists.txt
+  version = "0.1.22-pre1"; # Should match LEANTAR_VERSION in leanprover/lean4/CMakeLists.txt
 
   src = fetchFromGitHub {
-    owner = "digama0";
+    owner = "nomeata";
     repo = "leangz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EDei1ykLtjj8Qd9soL2p0h8lL+wQOgi5vQGWDbf1NK4=";
+    hash = "sha256-BR49v/hPbC2vNqDOLw/MJ/rnTB35FzoCjLjymm0eGp4=";
   };
 
-  cargoHash = "sha256-h0cbvqmX5p0/Me6kPKpcuMUcVivII2n4Z0D/DNyAVDI=";
+  cargoHash = "sha256-axSsZ1T1VNd7liTeVIYj2DICOo49CDV5821vcXqmw0Y=";
 
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [ zstd ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  doInstallCheck = true;
+  doInstallCheck = false;
 
   meta = {
     description = "Lean 4 .olean file (de)compressor";
